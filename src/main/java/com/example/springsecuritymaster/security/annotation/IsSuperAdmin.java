@@ -13,6 +13,4 @@ import static com.example.springsecuritymaster.security.SecurityRoles.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Secured(ROLES_PREFIX+SUPER_ADMIN)
 public @interface IsSuperAdmin {
-
-
 }

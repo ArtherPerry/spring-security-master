@@ -14,5 +14,4 @@ import static com.example.springsecuritymaster.security.SecurityRoles.*;
 @Target({ElementType.METHOD,ElementType.TYPE})
 @Secured(ROLES_PREFIX+CUSTOMERS_DELETE)
 public @interface IsCustomersDelete {
-
 }

@@ -1,5 +1,4 @@
-package com.example.springsecuritymaster.security.annotation.departments;
-
+package com.example.springsecuritymaster.security.annotation.employees;
 
 import org.springframework.security.access.annotation.Secured;
 
@@ -11,7 +10,7 @@ import java.lang.annotation.Target;
 import static com.example.springsecuritymaster.security.SecurityRoles.*;
 
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.METHOD,ElementType.TYPE})
-@Secured(ROLES_PREFIX+DEPARTMENT_CREATE)
-public @interface IsDepartmentCreate {
+@Target({ElementType.TYPE,ElementType.METHOD})
+@Secured(ROLES_PREFIX+EMPLOYEES_DELETE)
+public @interface IsEmployeesDelete {
 }

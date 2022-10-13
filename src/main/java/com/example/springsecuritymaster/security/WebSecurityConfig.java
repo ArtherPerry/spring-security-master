@@ -1,10 +1,12 @@
 package com.example.springsecuritymaster.security;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
@@ -16,37 +18,40 @@ import org.springframework.security.web.access.expression.DefaultWebSecurityExpr
 
 import static com.example.springsecuritymaster.security.SecurityRoles.*;
 
+
 @Configuration
 //@EnableWebSecurity
 public class WebSecurityConfig {
-
     @Autowired
     private RoleHierarchy roleHierarchy;
 
-    @Bean
-    public UserDetailsService userDetailsService() {
-        PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
 
-        var uds = new InMemoryUserDetailsManager();
-        var john = User.withUsername("john")
+    @Bean
+    public UserDetailsService userDetailsService(){
+
+        var uds =new InMemoryUserDetailsManager();
+
+        var john= User.withUsername("john")
                 .password("john")
                 .roles(SUPER_ADMIN)
                 .build();
-        var emma = User.withUsername("emma")
+
+        var emma=User.withUsername("emma")
                 .password("emma")
                 .roles(EMPLOYEES_ADMIN)
                 .build();
+
         var william = User.withUsername("william")
                 .password("william")
-                .roles(DEPARTMENT_CREATE, DEPARTMENT_PAG_VIEW, DEPARTMENTS_READ)
+                .roles(DEPARTMENTS_CREATE,DEPARTMENTS_READ,DEPARTMENTS_PAGE_VIEW)
                 .build();
 
         var lucas = User.withUsername("lucas")
                 .password("lucas")
-                .roles(CUSTOMERS_READ, CUSTOMERS_PAG_VIEW)
+                .roles(CUSTOMERS_READ,CUSTOMERS_PAGE_VIEW)
                 .build();
 
-        var tom = User.withUsername("tom")
+        var tom=User.withUsername("tom")
                 .password("tom")
                 .roles()
                 .build();
@@ -57,22 +62,22 @@ public class WebSecurityConfig {
         uds.createUser(lucas);
         uds.createUser(tom);
 
-
         return uds;
+
     }
+
     @Bean
     public PasswordEncoder passwordEncoder(){
         return NoOpPasswordEncoder.getInstance();
     }
-
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http)throws Exception{
 
         http.authorizeRequests()
                 .expressionHandler(expressionHandler())
-                .mvcMatchers("/", "/home", "/customers","/create-customer").permitAll()
+                .mvcMatchers("/","/home").permitAll()
                 .mvcMatchers("/bootstrap/**").permitAll()
-                .mvcMatchers("/customers").hasRole(CUSTOMERS_PAG_VIEW)
+                .mvcMatchers("/customers").hasRole(CUSTOMERS_PAGE_VIEW)
                 .anyRequest()
                 .authenticated()
                 .and()
@@ -88,14 +93,11 @@ public class WebSecurityConfig {
 
         http.csrf().disable();
         return http.build();
-    }
-
+    };
 
     private DefaultWebSecurityExpressionHandler expressionHandler() {
         DefaultWebSecurityExpressionHandler expressionHandler = new DefaultWebSecurityExpressionHandler();
         expressionHandler.setRoleHierarchy(roleHierarchy);
         return expressionHandler;
     }
-
-
 }

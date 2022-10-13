@@ -15,9 +15,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.annotation.processing.Generated;
 import javax.validation.Valid;
-
+import javax.websocket.server.PathParam;
 
 @Controller
 public class CustomerController {
@@ -27,34 +26,31 @@ public class CustomerController {
 
     @IsCustomersRead
     @GetMapping("/customers")
-    public ModelAndView findAllCustomer() {
+    public ModelAndView findAllCustomer(){
         return new ModelAndView(
                 "customers",
                 "customers",
                 customerDao.findAll()
         );
     }
-
     @IsCustomersCreate
     @GetMapping("/create-customer")
-    public String createCustomer(Model model) {
-        model.addAttribute("customer", new Customer());
+    public String createCustomer(Model model){
+        model.addAttribute("customer",new Customer());
         return "customer-form";
     }
-
     @IsCustomersCreate
     @PostMapping("/create-customer")
-    public String processCustomer(@Valid Customer customer, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
+    public String processCustomer(@Valid Customer customer, BindingResult result){
+        if(result.hasErrors()){
             return "customer-form";
         }
         customerDao.save(customer);
         return "redirect:/customers";
     }
-
     @IsCustomersDelete
     @GetMapping("/customers/delete")
-    public String deleteCustomer(@RequestParam("id") int id) {
+    public String deleteCustomer(@RequestParam("id")int id){
         customerDao.deleteById(id);
         return "redirect:/customers";
     }
