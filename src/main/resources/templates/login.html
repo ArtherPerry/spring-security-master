@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html th:replace="~{layout/mainLayout :: layout(~{::main})}" lang="en" xmlns:th="http://www.thymeleaf.org">
 
-
 <body>
 <main role="main">
-    <div class="container mt-5 d-flex justify-content-center">
-        <div class="row">
-            <div class="col-md-4">
+    <div class="container  mt-5">
+        <div class="row d-flex justify-content-center">
+            <div class="col-md-5">
+
                 <form action="#" th:action="@{/login}" method="post">
                     <div th:if="${loginError}">
                         <div class="alert alert-danger" role="alert">
@@ -29,5 +29,7 @@
         </div>
     </div>
 </main>
+
+
 </body>
 </html>
